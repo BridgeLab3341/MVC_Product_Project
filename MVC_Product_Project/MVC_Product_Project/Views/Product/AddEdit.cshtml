@@ -1,0 +1,98 @@
+﻿@model RepoLayer.Entities.UserProductEntity
+
+@{
+    ViewData["Title"] = "AddEdit";
+}
+<link href="~/css/AddEdit.css" rel="stylesheet" />
+
+<h1 class="text-muted">AddEdit</h1>
+
+<h4 class="text-success">ProductModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <input asp-for="ProductId" class="form-control" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiryDate" class="control-label"></label>
+                <input asp-for="ExpiryDate" class="form-control" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select asp-for="Category" class="form-control">
+                    <option value="">--Select--</option>
+                    <option value="CategoryA">Category A</option>
+                    <option value="CategoryB">Category B</option>
+                    <option value="CategoryC">Category C</option>
+                    <option value="CategoryD">Category D</option>
+                    <option value="CategoryE">Category E</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <div>
+                    @Html.RadioButtonFor(model =>model.Image,"/assets/Female1.PNG")
+                    <img class="image_one" src="~/assets/female1.png" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/Assets/Female2.PNG")
+                    <img class="image_two" src="~/assets/female2.png" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/Assets/Male1.PNG")
+                    <img class="image_three" src="~/assets/male1.png" />
+
+                    @Html.RadioButtonFor(model =>model.Image,"/Assets/Male2.PNG")
+                    <img class="image_four" src="~/assets/male2.png" />
+                </div>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <div>
+                    @Html.RadioButtonFor(model =>model.Status,"Active" )
+                    <label for="Active">Active</label>
+                    @Html.RadioButtonFor(model =>model.Status,"InActive")
+                    <label for="InActive">InActive</label>
+                </div>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

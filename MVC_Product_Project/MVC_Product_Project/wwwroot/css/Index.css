@@ -1,0 +1,9 @@
+﻿.text-muted {
+    color: #6c757d !important;
+    background: antiquewhite;
+    width: fit-content;
+    border-radius: 5px;
+}
+a {
+    color: white;
+}
