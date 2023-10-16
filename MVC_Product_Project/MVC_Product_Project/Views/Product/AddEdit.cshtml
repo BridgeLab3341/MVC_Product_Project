@@ -42,11 +42,11 @@
                 <label asp-for="Category" class="control-label"></label>
                 <select asp-for="Category" class="form-control">
                     <option value="">--Select--</option>
-                    <option value="CategoryA">Category A</option>
-                    <option value="CategoryB">Category B</option>
-                    <option value="CategoryC">Category C</option>
-                    <option value="CategoryD">Category D</option>
-                    <option value="CategoryE">Category E</option>
+                    <option value="Category A">Category A</option>
+                    <option value="Category B">Category B</option>
+                    <option value="Category C">Category C</option>
+                    <option value="Category D">Category D</option>
+                    <option value="Category E">Category E</option>
                 </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
@@ -85,13 +85,13 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

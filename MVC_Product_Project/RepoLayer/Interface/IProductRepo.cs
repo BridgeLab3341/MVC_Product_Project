@@ -11,5 +11,7 @@ namespace RepoLayer.Interface
         public string AddProduct(ProductModel models);
         public List<UserProductEntity> GetAllProducts();
         public bool DeleteProduct(int productId);
+        public string UpdateProduct(ProductModel product);
+
     }
 }

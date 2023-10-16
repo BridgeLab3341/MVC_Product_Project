@@ -21,6 +21,7 @@ INSERT INTO ProductStore(Code,Name,Description,ExpiryDate,Category,Image,Status,
 Values('232','Somu','erwr','2024-12-20','A','fefvev','Active','')
 
 CREATE OR ALTER PROCEDURE Sp_InsertProduct
+    @ProductId INT,
     @Code VARCHAR(50),
     @Name VARCHAR(250),
     @Description VARCHAR(4000),
@@ -31,8 +32,15 @@ CREATE OR ALTER PROCEDURE Sp_InsertProduct
 AS
 BEGIN
     BEGIN TRY
+	IF EXISTS (SELECT 1 FROM ProductStore WHERE ProductId = @ProductId)
+	BEGIN
+	UPDATE ProductStore SET Code = @Code, Name = @Name, Description = @Description, ExpiryDate = @ExpiryDate, Category = @Category,Image = @Image,Status = @Status WHERE ProductId = @ProductId;
+	END
+	ELSE
+	BEGIN
         INSERT INTO ProductStore (Code, Name, Description, ExpiryDate, Category, Image, Status)
         VALUES (@Code, @Name, @Description, @ExpiryDate, @Category, @Image, @Status);
+		END
     END TRY
     BEGIN CATCH
         SELECT ERROR_MESSAGE() AS ErrorMessage;
@@ -47,18 +55,6 @@ SELECT * FROM ProductStore;
 END TRY
 BEGIN CATCH
 SELECT ERROR_MESSAGE() AS ErrorMessage;
-END CATCH;
-END;
-
-CREATE OR ALTER PROCEDURE Sp_DeleteProduct
-@ProductId Int
-AS
-BEGIN
-BEGIN TRY
-DELETE FROM ProductStore where ProductId=@ProductId;
-END TRY
-BEGIN CATCH
-SELECT ERROR_MESSAGE() as ErrorMessage;
 END CATCH;
 END;
 
@@ -77,4 +73,3 @@ EXEC Sp_InsertProduct '289','Shekar','Subject','2024-12-20','B','dfgfdg','Active
 
 Select * from ProductStore;
 
-EXEC Sp_DeleteProduct 21;

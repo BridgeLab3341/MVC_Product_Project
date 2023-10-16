@@ -10,7 +10,7 @@
 <p>
     <a class="text-success" asp-action="AddEdit">Create New</a>
 </p>
-<form asp-controller="Product" method="get" asp-action="Index">
+@* <form asp-controller="Product" method="get" asp-action="Index">
     @using (Html.BeginForm())
     {
         <p>
@@ -19,42 +19,43 @@
         </p>
     }
 </form>
-<table class="table" id="pagination_tab">
+ *@
+<table id="product-table" class="table">
     <thead>
         <tr class="table-danger">
            @*  <th>
                 @Html.DisplayNameFor(model => model.ProductId)
             </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
+            <th class="sortable">
+                Code
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
+            <th class="sortable">
+                Name
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
+            <th class="sortable">
+                Description
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpiryDate)
+            <th class="sortable">
+                ExpiryDate
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
+            <th class="sortable">
+                Category
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
+            <th class="sortable">
+                Image
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
+            <th class="sortable">
+                Status
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
+            <th class="sortable">
+                CreationDate
             </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
 @foreach (var item in Model) {
-        <tr class="table-success">
+        <tr class="table">
             @* <td>
                 @Html.DisplayFor(modelItem => item.ProductId)
             </td> *@
@@ -94,9 +95,8 @@
 }
     </tbody>
 </table>
-
-
-
-
-
-
+@* <div class="pagination">
+    <button class="pagination-btn">1</button>
+    <button class="pagination-btn">2</button>
+    <!-- Add more pagination buttons based on the number of pages -->
+</div> *@

@@ -12,6 +12,7 @@ using PagedList;
 using PagedList.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
+using MVC_Product_Project.Models;
 
 namespace MVC_Product_Project.Controllers
 {
@@ -24,93 +25,83 @@ namespace MVC_Product_Project.Controllers
             this.productRepo = productRepo;
             this.productDbContext = dbContext;
         }
-        public  IActionResult Index(string searchstring, string sorting, int pg=1)
+        //Summary
+        //In Index View we Fetching all Data from Database
+        //Sorting,Searching by Filter method
+        //Pagination for a pages
+        public  IActionResult Index(string searchstring, string sorting, int pageNumer=1)
             {
             List<UserProductEntity> products = productRepo.GetAllProducts();
 
-            ViewData["CurrentSort"] = sorting;
-            //if(searchstring != null)
+            //ViewData["CurrentSort"] = sorting;
+
+            ////Search
+            //if (!string.IsNullOrEmpty(searchstring))
             //{
-            //    pageNumber = 1;
+            //    DateTime searchDate;
+            //    if (DateTime.TryParse(searchstring, out searchDate))
+            //    {
+            //        products = products.Where(p => p.CreationDate.Date == searchDate.Date || p.ExpiryDate.Date == searchDate.Date).ToList();
+            //    }
+            //    else
+            //    {
+            //        products= products.Where(p => p.Code.Contains(searchstring)|| p.Name.Contains(searchstring) || p.Description.Contains(searchstring) || p.Category.Contains(searchstring)|| p.Status.Contains(searchstring)).ToList();
+            //    }
+
             //}
-            //else
+
+            ////Sorting date 
+            //switch (sorting)
             //{
-            //    searchstring = currentFilter;   
+            //    case "desc":
+            //        products = products.OrderByDescending(p => p.CreationDate).ToList();
+            //        break;
+            //    case "asc":
+            //        products = products.OrderBy(p => p.CreationDate).ToList();
+            //        break;
+            //    default:
+            //        products = products.OrderByDescending(p => p.CreationDate).ToList();
+            //        break;
             //}
-
-            //Search
-            if (!string.IsNullOrEmpty(searchstring))
-            {
-                DateTime searchDate;
-                if (DateTime.TryParse(searchstring, out searchDate))
-                {
-                    products = products.Where(p => p.CreationDate.Date == searchDate.Date || p.ExpiryDate.Date == searchDate.Date).ToList();
-                }
-                else
-                {
-                    products= products.Where(p => p.Code.Contains(searchstring)|| p.Name.Contains(searchstring) || p.Description.Contains(searchstring) || p.Category.Contains(searchstring)|| p.Status.Contains(searchstring)).ToList();
-                }
-
-            }
-
-            //Sorting date 
-            switch (sorting)
-            {
-                case "desc":
-                    products = products.OrderByDescending(p => p.CreationDate).ToList();
-                    break;
-                case "asc":
-                    products = products.OrderBy(p => p.CreationDate).ToList();
-                    break;
-                default:
-                    products = products.OrderByDescending(p => p.CreationDate).ToList();
-                    break;
-            }
-            // Convert ProductEntity objects to ProductModel objects
-            
-            var userProducts = products.Select(ProductEntity => new ProductModel
-            {
-                //ProductId = ProductEntity.ProductId,
-                Code = ProductEntity.Code,
-                Name = ProductEntity.Name,
-                Description = ProductEntity.Description,
-                ExpiryDate = ProductEntity.ExpiryDate,
-                Category = ProductEntity.Category,
-                Image = ProductEntity.Image,
-                Status = ProductEntity.Status,
-                CreationDate = ProductEntity.CreationDate
-            }).ToList();
 
             //pagination
-            const int pageSize = 10;
-            if(pg < 1)
-                pg = 1;
-            int recsCount = userProducts.Count();
-            var pager =new PaginatedList(recsCount,pg,pageSize);
-            int recSkip=(pg-1) * pageSize;
-            this.ViewBag.PaginatedList = pager;
-            var paginatedProducts = userProducts.Skip(recSkip).Take(pager.PageSize).ToList();
-
             //int pageSize = 10;
-            //int pageNumberValue = pageNumber ?? 1;
-
-            //var paginatedProducts = PaginatedList<ProductModel>.Create(userProducts.AsQueryable(), pageNumberValue, pageSize);
-
-            //return View(paginatedProducts);
+            //int totalItems=products.Count();
+            //int pageIndex = page ?? 1;
+            ////creating pagination list
+            //var paginatedProducts=PaginatedList<UserProductEntity>.Create(products.AsQueryable(), pageIndex, pageSize);
 
             return View(products);
+            //return View(PaginatedList<UserProductEntity>.Create(products.AsQueryable(),pageNumer,5));
         }
+        //Summary 
+        //Add and Edit is Performing in only one Page by adding condition accroding to the code.
+        //Fetching the Product data if it is present and Edit if not view new page to add Products.
         public IActionResult AddEdit(string code)
         {
-            UserProductEntity product = this.productRepo.GetAllProducts().FirstOrDefault(x=> x.Code == code);
-           
+           List<UserProductEntity> product = this.productRepo.GetAllProducts().ToList();
+            UserProductEntity entity=product.SingleOrDefault(e=>e.Code== code);
 
-            if(product != null)
+            if (entity != null)
             {
-                return View(product);
+                ProductModel model = new ProductModel
+                {
+                    ProductId = entity.ProductId,
+                    Code = entity.Code,
+                    Name = entity.Name,
+                    Description = entity.Description,
+                    ExpiryDate = entity.ExpiryDate,
+                    Category = entity.Category,
+                    Image = entity.Image,
+                    Status = entity.Status,
+                    CreationDate = entity.CreationDate
+                };
+                return View(model);
             }
             return View();
         }
+        //Summary
+        //Adding the Product Data into Add page and Fetching data added in to Index Page by Redirecting to Index Page
         [HttpPost]
         public IActionResult AddEdit(ProductModel model)
         {
@@ -126,8 +117,11 @@ namespace MVC_Product_Project.Controllers
             catch
             {
                 throw;
-            }   
+            }
         }
+        //Summary
+        //Delete the Product Data By using the Delete Method.
+        //By Fetching the Data from UserEntity by ProductID and Deleting the Product.
         [HttpGet]
         public IActionResult Delete(int productId)
         {
